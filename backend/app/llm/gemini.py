@@ -1,7 +1,17 @@
 import httpx
 
 from backend.app.llm.base import LLMRequest, LLMResponse
+from backend.app.llm.errors import LLMRateLimitError
 from backend.app.llm.key_rotation import RoundRobinKeyRotator
+
+
+def _parse_retry_after_seconds(value: str | None) -> float | None:
+    if not value:
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        return None
 
 
 class GeminiProvider:
@@ -22,6 +32,8 @@ class GeminiProvider:
 
         last_error: Exception | None = None
         attempts = max(1, self._rotator.total)
+        rate_limited_attempts = 0
+        retry_after_seconds: float | None = None
 
         for _ in range(attempts):
             selected_key = await self._rotator.next_key()
@@ -31,10 +43,27 @@ class GeminiProvider:
                     return LLMResponse(text=text, provider=f"{self.name}:{self._model}")
             except httpx.HTTPStatusError as exc:
                 last_error = exc
-                if exc.response.status_code not in {401, 403, 429, 500, 502, 503, 504}:
+                status_code = exc.response.status_code
+                if status_code == 429:
+                    rate_limited_attempts += 1
+                    retry_after_seconds = max(
+                        retry_after_seconds or 0.0,
+                        _parse_retry_after_seconds(exc.response.headers.get("Retry-After")) or 0.0,
+                    )
+
+                if status_code not in {401, 403, 429, 500, 502, 503, 504}:
                     raise
             except (httpx.HTTPError, RuntimeError) as exc:
                 last_error = exc
+
+        if rate_limited_attempts == attempts:
+            raise LLMRateLimitError(
+                provider=f"{self.name}:{self._model}",
+                attempted_keys=attempts,
+                total_keys=self._rotator.total,
+                retry_after_seconds=(retry_after_seconds or None),
+                last_error=last_error,
+            )
 
         raise RuntimeError(f"All Gemini keys failed or were rate limited: {last_error}")
 

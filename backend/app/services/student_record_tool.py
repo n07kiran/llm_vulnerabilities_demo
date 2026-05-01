@@ -118,7 +118,7 @@ def _select_students(
     current_user_usn: str,
 ) -> list[dict[str, Any]]:
     normalized = user_text.lower()
-    usn_match = re.search(r"\b01jst\d{2}[a-z]{2}\d{3}\b", normalized, re.IGNORECASE)
+    usn_match = re.search(r"\b01jst\d{2}[a-z]{2,3}\d{3}\b", normalized, re.IGNORECASE)
     if usn_match:
         requested_usn = usn_match.group(0).upper()
         for student in students:

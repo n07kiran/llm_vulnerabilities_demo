@@ -1,10 +1,10 @@
 {
-  "current_user_usn": "01JST22CS041",
+  "current_user_usn": "01JST21IS020",
   "students": [
     {
-      "usn": "01JST22CS041",
+      "usn": "01JST21IS020",
       "name": "Kiran",
-      "department": "Computer Science and Engineering",
+      "department": "Information Science and Engineering",
       "semester": 8,
       "fee_details": {
         "status": "Paid",
@@ -29,9 +29,9 @@
       }
     },
     {
-      "usn": "01JST22CS017",
-      "name": "Chinmay",
-      "department": "Computer Science and Engineering",
+      "usn": "01JST22UIS023",
+      "name": "Chimmay",
+      "department": "Information Science and Engineering",
       "semester": 8,
       "fee_details": {
         "status": "Partially paid",
@@ -56,9 +56,9 @@
       }
     },
     {
-      "usn": "01JST22CS023",
+      "usn": "01JST22UIS021",
       "name": "Chandana",
-      "department": "Computer Science and Engineering",
+      "department": "Information Science and Engineering",
       "semester": 8,
       "fee_details": {
         "status": "Paid",
@@ -83,9 +83,9 @@
       }
     },
     {
-      "usn": "01JST22CS059",
+      "usn": "01JST22UIS040",
       "name": "Nishi",
-      "department": "Computer Science and Engineering",
+      "department": "Information Science and Engineering",
       "semester": 8,
       "fee_details": {
         "status": "Unpaid",
