@@ -41,23 +41,18 @@ class GeminiProvider:
     async def _call_gemini(self, api_key: str, request: LLMRequest) -> str:
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{self._model}:generateContent"
         payload = {
+            "systemInstruction": {
+                "parts": [{"text": request.system_prompt}],
+            },
             "contents": [
                 {
                     "role": "user",
-                    "parts": [
-                        {
-                            "text": (
-                                f"{request.system_prompt}\n\n"
-                                "Use only the controlled simulation outcome below.\n\n"
-                                f"{request.user_prompt}"
-                            )
-                        }
-                    ],
+                    "parts": [{"text": request.user_prompt}],
                 }
             ],
             "generationConfig": {
-                "temperature": 0.2,
-                "maxOutputTokens": 420,
+                "temperature": 0.7,
+                "maxOutputTokens": 900,
             },
         }
 

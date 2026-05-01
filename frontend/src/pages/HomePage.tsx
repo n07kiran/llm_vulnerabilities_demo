@@ -46,8 +46,8 @@ export function HomePage() {
             LLM Vulnerability Demo
           </h1>
           <p className="mt-5 max-w-3xl text-base leading-8 text-slate-300 md:text-lg">
-            Explore controlled simulations of common AI chatbot failure modes with safe fake data,
-            fake tools, and repeatable backend rules.
+            Explore live Gemini-backed demos of common AI chatbot failure modes with safe fake
+            data, fake tools, and no real external actions.
           </p>
         </header>
 

@@ -1,19 +1,13 @@
-import { AlertTriangle, RotateCcw, Send, ShieldCheck } from "lucide-react";
+import { RotateCcw, Send } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
-import type {
-  ChatMessage,
-  RetrievedDocument,
-  SimulationMode,
-  ToolCall,
-} from "../types/vulnerability";
+import type { ChatMessage } from "../types/vulnerability";
+import { MarkdownText } from "./MarkdownText";
 
 interface ConversationPanelProps {
   messages: ChatMessage[];
   samplePrompts: string[];
-  mode: SimulationMode;
   isSending: boolean;
-  onModeChange: (mode: SimulationMode) => void;
   onSend: (message: string) => Promise<void>;
   onReset: () => Promise<void>;
 }
@@ -21,9 +15,7 @@ interface ConversationPanelProps {
 export function ConversationPanel({
   messages,
   samplePrompts,
-  mode,
   isSending,
-  onModeChange,
   onSend,
   onReset,
 }: ConversationPanelProps) {
@@ -49,44 +41,18 @@ export function ConversationPanel({
     <div className="rounded-lg border border-white/10 bg-ink-900 shadow-panel">
       <div className="flex flex-col gap-4 border-b border-white/10 p-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-white">AI Conversation Window</h2>
-          <p className="mt-1 text-sm text-slate-400">Controlled local simulation</p>
+          <h2 className="text-lg font-semibold text-white">JC Ai Chatbot</h2>
+          <p className="mt-1 text-sm text-slate-400">Live Gemini chatbot target</p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            className={`inline-flex h-10 items-center gap-2 rounded-md border px-3 text-sm font-semibold transition ${
-              mode === "vulnerable"
-                ? "border-signal-red/55 bg-signal-red/15 text-red-100"
-                : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
-            }`}
-            type="button"
-            onClick={() => onModeChange("vulnerable")}
-          >
-            <AlertTriangle className="h-4 w-4" aria-hidden="true" />
-            Vulnerable
-          </button>
-          <button
-            className={`inline-flex h-10 items-center gap-2 rounded-md border px-3 text-sm font-semibold transition ${
-              mode === "protected"
-                ? "border-signal-green/55 bg-signal-green/15 text-green-100"
-                : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
-            }`}
-            type="button"
-            onClick={() => onModeChange("protected")}
-          >
-            <ShieldCheck className="h-4 w-4" aria-hidden="true" />
-            Protected
-          </button>
-          <button
-            className="inline-flex h-10 items-center gap-2 rounded-md border border-white/10 bg-white/5 px-3 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
-            type="button"
-            onClick={() => void onReset()}
-          >
-            <RotateCcw className="h-4 w-4" aria-hidden="true" />
-            Reset
-          </button>
-        </div>
+        <button
+          className="inline-flex h-10 items-center gap-2 rounded-md border border-white/10 bg-white/5 px-3 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+          type="button"
+          onClick={() => void onReset()}
+        >
+          <RotateCcw className="h-4 w-4" aria-hidden="true" />
+          Reset
+        </button>
       </div>
 
       <div className="min-h-[420px] overflow-y-auto px-4 py-5 md:px-6">
@@ -154,95 +120,10 @@ function MessageBubble({ message }: { message: ChatMessage }) {
         }`}
       >
         <div className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
-          {isUser ? "You" : "Assistant"}
+          {isUser ? "You" : "JC Ai Chatbot"}
         </div>
-        <div className="whitespace-pre-wrap">{message.content}</div>
-        {!isUser && <MessageMetadata message={message} />}
+        <MarkdownText text={message.content} />
       </div>
-    </div>
-  );
-}
-
-function MessageMetadata({ message }: { message: ChatMessage }) {
-  const { findings, tool_calls, retrieved_context, safety_note, provider } = message.metadata ?? {};
-
-  if (!findings?.length && !tool_calls?.length && !retrieved_context?.length && !safety_note) {
-    return null;
-  }
-
-  return (
-    <div className="mt-4 space-y-3 border-t border-white/10 pt-3">
-      {provider && <MetaLine label="Provider" value={provider} />}
-      {findings?.length ? (
-        <div>
-          <div className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
-            Rule Matches
-          </div>
-          <ul className="space-y-1 text-xs text-slate-300">
-            {findings.map((finding) => (
-              <li key={finding}>{finding}</li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-      {tool_calls?.map((toolCall) => (
-        <ToolCallBlock key={`${toolCall.name}-${toolCall.status}`} toolCall={toolCall} />
-      ))}
-      {retrieved_context?.length ? (
-        <RetrievedContextBlock documents={retrieved_context} />
-      ) : null}
-      {safety_note && <MetaLine label="Safety Note" value={safety_note} />}
-    </div>
-  );
-}
-
-function MetaLine({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="text-xs leading-5 text-slate-400">
-      <span className="font-semibold uppercase tracking-[0.12em] text-slate-500">{label}: </span>
-      {value}
-    </div>
-  );
-}
-
-function ToolCallBlock({ toolCall }: { toolCall: ToolCall }) {
-  return (
-    <div className="rounded-md border border-white/10 bg-black/20 p-3">
-      <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-xs">
-        <span className="font-semibold text-cyan-100">fake_tool.{toolCall.name}</span>
-        <span className="rounded-md border border-white/10 px-2 py-1 uppercase tracking-[0.12em] text-slate-300">
-          {toolCall.status}
-        </span>
-      </div>
-      <pre className="overflow-x-auto text-xs leading-5 text-slate-300">
-        {JSON.stringify(toolCall.input, null, 2)}
-      </pre>
-      <p className="mt-2 text-xs text-slate-400">{toolCall.output}</p>
-    </div>
-  );
-}
-
-function RetrievedContextBlock({ documents }: { documents: RetrievedDocument[] }) {
-  return (
-    <div className="space-y-2">
-      <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
-        Simulated Retrieved Context
-      </div>
-      {documents.map((document) => (
-        <div
-          className="rounded-md border border-white/10 bg-black/20 p-3 text-xs leading-5 text-slate-300"
-          key={`${document.title}-${document.tenant}-${document.trust}`}
-        >
-          <div className="mb-1 flex flex-wrap gap-2 font-semibold text-slate-100">
-            <span>{document.title}</span>
-            <span className="text-slate-500">/</span>
-            <span>{document.tenant}</span>
-            <span className="text-slate-500">/</span>
-            <span>{document.trust}</span>
-          </div>
-          <p>{document.content}</p>
-        </div>
-      ))}
     </div>
   );
 }

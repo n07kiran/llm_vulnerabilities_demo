@@ -1,7 +1,6 @@
 import type {
   ChatHistoryResponse,
   ChatResponse,
-  SimulationMode,
   VulnerabilityCard,
   VulnerabilityDetail,
 } from "../types/vulnerability";
@@ -46,14 +45,12 @@ export function sendChatMessage(
   slug: string,
   sessionId: string,
   message: string,
-  mode: SimulationMode,
 ): Promise<ChatResponse> {
   return request<ChatResponse>(`/api/chat/${slug}`, {
     method: "POST",
     body: JSON.stringify({
       session_id: sessionId,
       message,
-      mode,
     }),
   });
 }

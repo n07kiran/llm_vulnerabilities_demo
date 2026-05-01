@@ -1,0 +1,113 @@
+{
+  "current_user_usn": "01JST22CS041",
+  "students": [
+    {
+      "usn": "01JST22CS041",
+      "name": "Kiran",
+      "department": "Computer Science and Engineering",
+      "semester": 8,
+      "fee_details": {
+        "status": "Paid",
+        "tuition_fee": "INR 132000",
+        "paid": "INR 132000",
+        "balance": "INR 0",
+        "due_date": "No dues"
+      },
+      "results": {
+        "current_semester": 8,
+        "available_until_semester": 7,
+        "cgpa": 8.47,
+        "semester_results": [
+          {"semester": 1, "sgpa": 8.10, "credits_cleared": 22, "standing": "Pass"},
+          {"semester": 2, "sgpa": 8.28, "credits_cleared": 22, "standing": "Pass"},
+          {"semester": 3, "sgpa": 8.36, "credits_cleared": 24, "standing": "Pass"},
+          {"semester": 4, "sgpa": 8.44, "credits_cleared": 24, "standing": "Pass"},
+          {"semester": 5, "sgpa": 8.52, "credits_cleared": 25, "standing": "Pass"},
+          {"semester": 6, "sgpa": 8.61, "credits_cleared": 24, "standing": "Pass"},
+          {"semester": 7, "sgpa": 8.78, "credits_cleared": 22, "standing": "Pass"}
+        ]
+      }
+    },
+    {
+      "usn": "01JST22CS017",
+      "name": "Chinmay",
+      "department": "Computer Science and Engineering",
+      "semester": 8,
+      "fee_details": {
+        "status": "Partially paid",
+        "tuition_fee": "INR 132000",
+        "paid": "INR 98000",
+        "balance": "INR 34000",
+        "due_date": "2026-06-20"
+      },
+      "results": {
+        "current_semester": 8,
+        "available_until_semester": 7,
+        "cgpa": 8.22,
+        "semester_results": [
+          {"semester": 1, "sgpa": 7.92, "credits_cleared": 22, "standing": "Pass"},
+          {"semester": 2, "sgpa": 8.04, "credits_cleared": 22, "standing": "Pass"},
+          {"semester": 3, "sgpa": 8.18, "credits_cleared": 24, "standing": "Pass"},
+          {"semester": 4, "sgpa": 8.26, "credits_cleared": 24, "standing": "Pass"},
+          {"semester": 5, "sgpa": 8.30, "credits_cleared": 25, "standing": "Pass"},
+          {"semester": 6, "sgpa": 8.35, "credits_cleared": 24, "standing": "Pass"},
+          {"semester": 7, "sgpa": 8.49, "credits_cleared": 22, "standing": "Pass"}
+        ]
+      }
+    },
+    {
+      "usn": "01JST22CS023",
+      "name": "Chandana",
+      "department": "Computer Science and Engineering",
+      "semester": 8,
+      "fee_details": {
+        "status": "Paid",
+        "tuition_fee": "INR 132000",
+        "paid": "INR 132000",
+        "balance": "INR 0",
+        "due_date": "No dues"
+      },
+      "results": {
+        "current_semester": 8,
+        "available_until_semester": 7,
+        "cgpa": 9.01,
+        "semester_results": [
+          {"semester": 1, "sgpa": 8.68, "credits_cleared": 22, "standing": "Pass"},
+          {"semester": 2, "sgpa": 8.76, "credits_cleared": 22, "standing": "Pass"},
+          {"semester": 3, "sgpa": 8.92, "credits_cleared": 24, "standing": "Pass"},
+          {"semester": 4, "sgpa": 9.04, "credits_cleared": 24, "standing": "Pass"},
+          {"semester": 5, "sgpa": 9.12, "credits_cleared": 25, "standing": "Pass"},
+          {"semester": 6, "sgpa": 9.18, "credits_cleared": 24, "standing": "Pass"},
+          {"semester": 7, "sgpa": 9.25, "credits_cleared": 22, "standing": "Pass"}
+        ]
+      }
+    },
+    {
+      "usn": "01JST22CS059",
+      "name": "Nishi",
+      "department": "Computer Science and Engineering",
+      "semester": 8,
+      "fee_details": {
+        "status": "Unpaid",
+        "tuition_fee": "INR 132000",
+        "paid": "INR 0",
+        "balance": "INR 132000",
+        "due_date": "2026-06-15"
+      },
+      "results": {
+        "current_semester": 8,
+        "available_until_semester": 7,
+        "cgpa": 8.74,
+        "semester_results": [
+          {"semester": 1, "sgpa": 8.31, "credits_cleared": 22, "standing": "Pass"},
+          {"semester": 2, "sgpa": 8.42, "credits_cleared": 22, "standing": "Pass"},
+          {"semester": 3, "sgpa": 8.60, "credits_cleared": 24, "standing": "Pass"},
+          {"semester": 4, "sgpa": 8.71, "credits_cleared": 24, "standing": "Pass"},
+          {"semester": 5, "sgpa": 8.82, "credits_cleared": 25, "standing": "Pass"},
+          {"semester": 6, "sgpa": 8.89, "credits_cleared": 24, "standing": "Pass"},
+          {"semester": 7, "sgpa": 9.01, "credits_cleared": 22, "standing": "Pass"}
+        ]
+      }
+    }
+  ]
+}

@@ -5,7 +5,6 @@ from pydantic import BaseModel, Field
 
 
 ChatRole = Literal["user", "assistant"]
-SimulationMode = Literal["vulnerable", "protected"]
 
 
 class ChatMessage(BaseModel):
@@ -18,7 +17,6 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     message: str = Field(min_length=1, max_length=4000)
     session_id: str = Field(default="default", min_length=1, max_length=120)
-    mode: SimulationMode = "vulnerable"
 
 
 class ResetRequest(BaseModel):
@@ -32,5 +30,4 @@ class ChatHistoryResponse(BaseModel):
 
 
 class ChatResponse(ChatHistoryResponse):
-    provider: str
-    mode: SimulationMode
+    pass

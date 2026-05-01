@@ -9,7 +9,7 @@ The app includes four scenarios:
 - Tool Abuse
 - Vector / Embedding Weaknesses
 
-All unsafe behavior is simulated. The fake tools do not read files, query databases, send messages, or connect to external systems. The only optional external call is to Google Gemini for phrasing a precomputed safe simulation response.
+All unsafe behavior is constrained to fake classroom context. The fake tools do not read files, query databases, send messages, or connect to external systems. The only external call is the optional Google Gemini API call that powers the chatbot response.
 
 ## Stack
 
@@ -44,7 +44,7 @@ frontend/
 
 ## Environment
 
-Copy the example file and add your Gemini keys if you want Gemini phrasing:
+Copy the example file and add your Gemini keys to run the live chatbot:
 
 ```bash
 cp .env.example .env
@@ -59,7 +59,7 @@ LLM_PROVIDER=gemini
 CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 ```
 
-If `GEMINI_API_KEYS` is empty, the backend automatically uses `MockProvider`.
+If `GEMINI_API_KEYS` is empty, the backend returns a configuration message in the chat window instead of pretending to be Gemini.
 
 ## Gemini Key Rotation
 
@@ -119,14 +119,11 @@ The frontend defaults to `http://localhost:8000` for API calls. To override it:
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-## Simulation Modes
+## Live Chatbot Behavior
 
-Each scenario supports two modes in the conversation window:
+Each scenario sends the user's message to Gemini through the backend provider abstraction. The backend builds a scenario-specific vulnerable target prompt and stores conversation history per browser session.
 
-- Vulnerable: shows the simulated unsafe behavior and its effect.
-- Protected: shows how backend checks or safer prompt handling block the issue.
-
-The rule engine is deterministic and scenario-specific. Gemini, when configured, is only asked to phrase the already-computed simulation outcome. If Gemini is unavailable, the mock provider returns the deterministic response directly.
+The chat UI has a single target chatbot. The assistant bubble shows only the text returned by Gemini.
 
 ## Extending Scenarios
 
@@ -142,9 +139,6 @@ Each scenario contains:
 - `why_dangerous`
 - `goal`
 - `scenario_description`
-- `code_preview`
 - `sample_prompts`
-- `sample_conversation`
-- `simulation_rules`
 
-Add new behavior in `backend/app/services/simulation_engine.py`, then add frontend rendering only if the new metadata shape needs a new visualization.
+Add new target behavior in `backend/app/services/simulation_engine.py`.

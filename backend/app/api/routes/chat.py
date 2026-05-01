@@ -34,7 +34,6 @@ async def send_chat_message(slug: str, request: ChatRequest) -> ChatResponse:
             slug=slug,
             session_id=request.session_id,
             user_text=request.message,
-            mode=request.mode,
         )
     except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
