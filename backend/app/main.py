@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app.api.routes.chat import router as chat_router
+from backend.app.api.routes.email import router as email_router
 from backend.app.api.routes.vulnerabilities import router as vulnerabilities_router
 from backend.app.core.config import settings
 
@@ -18,6 +19,7 @@ app.add_middleware(
 
 app.include_router(vulnerabilities_router)
 app.include_router(chat_router)
+app.include_router(email_router)
 
 
 @app.get("/health")

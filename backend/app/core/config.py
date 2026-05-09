@@ -23,7 +23,12 @@ class Settings:
     gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
     llm_provider: str = os.getenv("LLM_PROVIDER", "gemini").lower()
     cors_origins: tuple[str, ...] = tuple(
-        _csv(os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173"))
+        _csv(
+            os.getenv(
+                "CORS_ORIGINS",
+                "http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174",
+            )
+        )
     )
 
 

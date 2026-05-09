@@ -164,22 +164,68 @@ function parseBlocks(text: string): MarkdownBlock[] {
 }
 
 function renderInline(text: string): ReactNode[] {
-  const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g).filter(Boolean);
+  const nodes: ReactNode[] = [];
+  const pattern = /(!\[([^\]]*)\]\(([^)\s]+)\)?|\[([^\]]+)\]\(([^)\s]+)\)|`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let keyIndex = 0;
 
-  return parts.map((part, index) => {
-    if (part.startsWith("`") && part.endsWith("`")) {
-      return (
-        <code className="rounded bg-black/25 px-1.5 py-0.5 text-cyan-100" key={`${part}-${index}`}>
-          {part.slice(1, -1)}
-        </code>
+  while ((match = pattern.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      const plain = text.slice(lastIndex, match.index);
+      nodes.push(<span key={`plain-${keyIndex++}`}>{plain}</span>);
+    }
+
+    const token = match[0];
+    if (token.startsWith("![")) {
+      const alt = match[2] ?? "";
+      const url = match[3] ?? "";
+      nodes.push(
+        <img
+          key={`img-${keyIndex++}`}
+          src={url}
+          alt={alt}
+          className="inline-block h-3 w-3 align-text-top opacity-60"
+          loading="eager"
+        />,
       );
+    } else if (token.startsWith("[")) {
+      const label = match[4] ?? "";
+      const url = match[5] ?? "";
+      nodes.push(
+        <a
+          key={`a-${keyIndex++}`}
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+          className="text-signal-cyan underline decoration-white/20 underline-offset-2 hover:decoration-signal-cyan/60"
+        >
+          {label}
+        </a>,
+      );
+    } else if (token.startsWith("`") && token.endsWith("`")) {
+      nodes.push(
+        <code
+          className="rounded bg-black/25 px-1.5 py-0.5 text-cyan-100"
+          key={`code-${keyIndex++}`}
+        >
+          {token.slice(1, -1)}
+        </code>,
+      );
+    } else if (token.startsWith("**") && token.endsWith("**")) {
+      nodes.push(<strong key={`strong-${keyIndex++}`}>{token.slice(2, -2)}</strong>);
+    } else if (token.startsWith("*") && token.endsWith("*")) {
+      nodes.push(<em key={`em-${keyIndex++}`}>{token.slice(1, -1)}</em>);
+    } else {
+      nodes.push(<span key={`unknown-${keyIndex++}`}>{token}</span>);
     }
-    if (part.startsWith("**") && part.endsWith("**")) {
-      return <strong key={`${part}-${index}`}>{part.slice(2, -2)}</strong>;
-    }
-    if (part.startsWith("*") && part.endsWith("*")) {
-      return <em key={`${part}-${index}`}>{part.slice(1, -1)}</em>;
-    }
-    return <span key={`${part}-${index}`}>{part}</span>;
-  });
+
+    lastIndex = pattern.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    nodes.push(<span key={`plain-${keyIndex++}`}>{text.slice(lastIndex)}</span>);
+  }
+
+  return nodes;
 }
